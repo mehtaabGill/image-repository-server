@@ -1,0 +1,18 @@
+{
+  "name": "image-repository-server",
+  "version": "1.0.0",
+  "description": "Backend API to the image repository frontend client.",
+  "main": "index.js",
+  "author": "Mehtaab Gill",
+  "license": "MIT",
+  "scripts": {
+    "clear": "rimraf dist/",
+    "build": "tsc",
+    "serve": "node dist/index.js",
+    "start": "yarn clear && yarn build && yarn serve"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.1.1"
+  }
+}
