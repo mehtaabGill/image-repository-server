@@ -10,7 +10,8 @@
     "build": "tsc",
     "serve": "node dist/index.js",
     "start": "yarn clear && yarn build && yarn serve",
-    "commit": "cz"
+    "commit": "cz",
+    "commit:full": "git add . && yarn commit && git push"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
