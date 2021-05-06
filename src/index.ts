@@ -5,9 +5,11 @@ const PORT = process.env.PORT ?? 3000;
 
 import express from 'express';
 import setupMiddleware from './helpers/setupMiddleware';
+import setupRouters from './helpers/setupRouters';
 
 const app = express();
 
 setupMiddleware(app);
+setupRouters(app);
 
 app.listen(PORT, () => { console.log(`app listening at http://127.0.0.1:${PORT}`) })
