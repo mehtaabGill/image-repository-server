@@ -1,15 +1,12 @@
 import { Image } from '../types/images';
-import { loadAllImages } from './database';
+import { loadAllImages } from '../helpers/database';
 import { Request, Response } from 'express';
 
 /**
- * Returns string array containing the filer path of all images
- * @returns string array of file paths
+ * sends the respective image for the fileName provided
+ * @param req Request
+ * @param res Response
  */
-export function readAllImageNames(): string[] {
-    return loadAllImages().map((image: Image) => image.fileName);
-}
-
 export function sendImageByName (req: Request, res: Response) {
     const allImages = loadAllImages();
     
