@@ -1,0 +1,23 @@
+[
+    {
+        "id": 0,
+        "md5Hash": "029A04D215C268E709AC24894C474A44",
+        "filePath": "C:\\Users\\mehta\\source\\image-repository-server\\images\\029A04D215C268E709AC24894C474A44.jpg",
+        "recognizedText": [
+            "shopify",
+            "u"
+        ],
+        "tags": [
+            "design",
+            "text",
+            "logo",
+            "graphic",
+            "font"
+        ],
+        "specs": {
+            "format": "jpeg",
+            "width": 810,
+            "height": 456
+        }
+    }
+]
