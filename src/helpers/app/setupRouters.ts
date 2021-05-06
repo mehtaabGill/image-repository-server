@@ -1,7 +1,7 @@
 import { Express } from 'express';
 
-import routerData from '../routers';
-import { RouterConfig } from '../types/internals';
+import routerData from '../../routers';
+import { RouterConfig } from '../../types/internals';
 
 /**
  * Configures the routers for the express app provided

@@ -4,8 +4,8 @@ dotenv.config();
 const PORT = process.env.PORT ?? 3000;
 
 import express from 'express';
-import setupMiddleware from './helpers/setupMiddleware';
-import setupRouters from './helpers/setupRouters';
+import setupMiddleware from './helpers/app/setupMiddleware';
+import setupRouters from './helpers/app/setupRouters';
 
 const app = express();
 
