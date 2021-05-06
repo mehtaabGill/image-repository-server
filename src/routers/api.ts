@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { readAllImageNames } from '../controllers/images';
+import { readAllImageNames } from '../helpers/database';
 
 const router = Router();
 
