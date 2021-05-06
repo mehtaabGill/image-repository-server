@@ -1,6 +1,7 @@
-import { readAllImageNames } from '../helpers/database';
+import { loadAllImages } from '../helpers/database';
 import { Request, Response } from 'express';
+import { Image } from '../types/images';
 
 export function sendAllImageNames (req: Request, res: Response) {
-    res.json(readAllImageNames());
+    res.json(loadAllImages().map((image: Image) => image.fileName));
 }

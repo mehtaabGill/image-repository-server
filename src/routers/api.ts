@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { readAllImageNames } from '../helpers/database';
+import { Image } from '../types/images';
+import { loadAllImages } from '../helpers/database';
 
 const router = Router();
 
 router.get('/fetch-all-images', (req, res) => {
-    res.json(readAllImageNames());
+    res.json(loadAllImages().map((image: Image) => image.fileName));
 })
 
 export default router;
