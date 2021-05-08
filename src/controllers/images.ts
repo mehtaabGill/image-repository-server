@@ -1,5 +1,5 @@
 import { Image } from '../types/images';
-import { loadAllImages } from '../helpers/database';
+import DatabaseClient from '../helpers/database';
 import { Request, Response } from 'express';
 
 /**
@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
  * @param res Response
  */
 export function sendImageByName (req: Request, res: Response) {
-    const allImages = loadAllImages();
+    const allImages = DatabaseClient.loadAllImages();
     
     const requestedImage = allImages.find((image: Image) => image.fileName === req.params.imageName);
     

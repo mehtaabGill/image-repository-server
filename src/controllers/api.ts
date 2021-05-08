@@ -1,4 +1,4 @@
-import { loadAllImages, addImage } from '../helpers/database';
+import DatabaseClient from '../helpers/database';
 import Rekognition from '../helpers/RekognitionClient'; 
 import { Request, Response } from 'express';
 import { Image } from '../types/images';
@@ -11,7 +11,7 @@ const safeMIMETypes = ['image/png', 'image/jpeg']
  * @param res Response
  */
 export function sendAllImageNames (req: Request, res: Response) {
-    res.json(loadAllImages().map((image: Image) => image.fileName));
+    res.json(DatabaseClient.loadAllImages().map((image: Image) => image.fileName));
 }
 
 /**
@@ -33,7 +33,7 @@ export async function addNewImage (req: Request, res: Response) {
     const labels = await Rekognition.getImageLabels(uploadedImage.data);
     const text = await Rekognition.getImageText(uploadedImage.data);
 
-    addImage(uploadedImage, text, labels)
+    DatabaseClient.addImage(uploadedImage, text, labels)
 
     res.status(200).json({success: true})
 }
