@@ -16,6 +16,11 @@ class ComputerVision {
         this.rekognition = new AWS.Rekognition({ region });
     }
 
+    /**
+     * Generates an array of tags base on the specified image
+     * @param imageBytes Bytes of image to be used
+     * @returns string array of tags
+     */
     public async getImageLabels(imageBytes: Buffer): Promise<string[]> {
         const imageSummary = await this.rekognition.detectLabels({Image: {Bytes: imageBytes}, MinConfidence: 70}).promise();
         if(!imageSummary.Labels) throw new RekognitionError('Error during image rekognition');

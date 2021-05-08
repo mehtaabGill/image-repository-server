@@ -38,6 +38,11 @@ export async function addNewImage (req: Request, res: Response) {
     res.status(200).json({success: true})
 }
 
+/**
+ * API Call to get a list of images based off a specific search
+ * @param req Request
+ * @param res Response
+ */
 export async function getImagesBySearch(req: Request, res: Response) {
     if(!req.query.search || typeof req.query.search !== 'string') return res.status(400).json({ errors: ['invalid "search" query parameter'] });
     res.json((await DatabaseClient.getImagesByQuery(req.query.search)).map(image => image.fileName));

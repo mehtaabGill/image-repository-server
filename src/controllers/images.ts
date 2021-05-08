@@ -1,4 +1,3 @@
-import { IImage } from '../types/images';
 import DatabaseClient from '../helpers/database';
 import { Request, Response } from 'express';
 
