@@ -22,8 +22,8 @@ export function addImage(file: UploadedFile, recognizedText: string[], tags: str
         md5Hash: file.md5,
         fileName: `${file.md5}.${file.mimetype === 'image/png' ? 'png' : 'jpg'}`,
         filePath: path.join(imageFolder, `${file.md5}.${file.mimetype === 'image/png' ? 'png' : 'jpg'}`),
-        recognizedText,
-        tags
+        recognizedText: recognizedText.join(' '),
+        tags: tags.join(' ')
     }
 
     if(writeToFile) {
