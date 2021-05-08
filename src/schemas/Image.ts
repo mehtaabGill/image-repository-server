@@ -8,8 +8,8 @@ const ImageSchema = new Schema({
     md5Hash: { type: String, required: true },
     filePath: { type: String, required: true },
     fileName: { type: String, required: true },
-    recognizedText: { type: String, required: true },
-    tags: { type: String, required: true }
+    recognizedText: { type: String, default: '' },
+    tags: { type: String, default: '' }
 }, { collection: 'images' });
 
 //Used for search indexing in mongoDB
