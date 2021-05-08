@@ -2,6 +2,7 @@ import DatabaseClient from '../helpers/database';
 import Rekognition from '../helpers/RekognitionClient'; 
 import { Request, Response } from 'express';
 import { IImage } from '../types/images';
+import mongoose from 'mongoose';
 
 const safeMIMETypes = ['image/png', 'image/jpeg']
 
@@ -46,4 +47,23 @@ export async function addNewImage (req: Request, res: Response) {
 export async function getImagesBySearch(req: Request, res: Response) {
     if(!req.query.search || typeof req.query.search !== 'string') return res.status(400).json({ errors: ['invalid "search" query parameter'] });
     res.json((await DatabaseClient.getImagesByQuery(req.query.search)).map(image => image.fileName));
+}
+
+/**
+ * Simple health check API call
+ * @param req Request
+ * @param res Response
+ */
+export async function healthCheck(req: Request, res: Response) {
+    const isConnectedToDB = mongoose.connection.readyState === 1;
+    
+    if(!isConnectedToDB) {
+        res.status(500).json({ errors: ['Not connected to database'] });
+    } else {
+        res.json({
+            isConnectedToDB,
+            uptime: process.uptime(),
+            cpuUsage: process.cpuUsage()
+        })
+    }
 }
