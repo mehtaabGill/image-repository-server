@@ -1,4 +1,4 @@
-import { Image } from '../types/images';
+import { IImage } from '../types/images';
 import DatabaseClient from '../helpers/database';
 import { Request, Response } from 'express';
 
@@ -7,10 +7,13 @@ import { Request, Response } from 'express';
  * @param req Request
  * @param res Response
  */
-export function sendImageByName (req: Request, res: Response) {
-    const allImages = DatabaseClient.loadAllImages();
-    
-    const requestedImage = allImages.find((image: Image) => image.fileName === req.params.imageName);
+export async function sendImageByName (req: Request, res: Response) {
+
+    if(!req.params.imageName) {
+        return res.status(400).end();
+    }
+
+    const requestedImage = await DatabaseClient.getImageByFileName(req.params.imageName);
     
     if(requestedImage) {
         res.sendFile(requestedImage.filePath);

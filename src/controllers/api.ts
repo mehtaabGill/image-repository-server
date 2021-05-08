@@ -1,7 +1,7 @@
 import DatabaseClient from '../helpers/database';
 import Rekognition from '../helpers/RekognitionClient'; 
 import { Request, Response } from 'express';
-import { Image } from '../types/images';
+import { IImage } from '../types/images';
 
 const safeMIMETypes = ['image/png', 'image/jpeg']
 
@@ -10,8 +10,8 @@ const safeMIMETypes = ['image/png', 'image/jpeg']
  * @param req Request
  * @param res Response
  */
-export function sendAllImageNames (req: Request, res: Response) {
-    res.json(DatabaseClient.loadAllImages().map((image: Image) => image.fileName));
+export async function sendAllImageNames (req: Request, res: Response) {
+    res.json((await DatabaseClient.loadAllImages()).map((image: IImage) => image.fileName));
 }
 
 /**
@@ -33,12 +33,12 @@ export async function addNewImage (req: Request, res: Response) {
     const labels = await Rekognition.getImageLabels(uploadedImage.data);
     const text = await Rekognition.getImageText(uploadedImage.data);
 
-    DatabaseClient.addImage(uploadedImage, text, labels)
+    DatabaseClient.addImage(uploadedImage, text, labels);
 
     res.status(200).json({success: true})
 }
 
 export async function getImagesBySearch(req: Request, res: Response) {
-    if(!req.query.search || typeof req.query.search !== 'string') return res.status(400).json({ errors: ['invalid "search" query parameter'] })
-    res.json(DatabaseClient.getImagesByQuery(req.query.search).map(image => image.fileName));
+    if(!req.query.search || typeof req.query.search !== 'string') return res.status(400).json({ errors: ['invalid "search" query parameter'] });
+    res.json((await DatabaseClient.getImagesByQuery(req.query.search)).map(image => image.fileName));
 }
