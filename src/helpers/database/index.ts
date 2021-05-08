@@ -38,6 +38,13 @@ export default class DatabaseManager {
      * @param writeToFile wether to write the image to the disk or not
      */
     static addImage(file: UploadedFile, recognizedText: string[], tags: string[], writeToFile: boolean = true) {
+        
+        const allImages = this.loadAllImages();
+        
+        if(allImages.find(image => image.md5Hash === file.md5)) {
+            return;
+        }
+
         const image: Image = {
             md5Hash: file.md5,
             fileName: `${file.md5}.${file.mimetype === 'image/png' ? 'png' : 'jpg'}`,
@@ -50,7 +57,8 @@ export default class DatabaseManager {
             fs.writeFileSync(image.filePath, file.data);
         }
     
-        this.addToDB(image);
+        allImages.push(image);
+        this.dumpDB(allImages);
     }
 
     /**
@@ -60,6 +68,22 @@ export default class DatabaseManager {
     static addToDB(image: Image) {
         const allImages = this.loadAllImages();
         allImages.push(image);
+    }
+
+    /**
+     * 
+     * @param allImages array of image data to write to the database
+     */
+    static dumpDB(allImages: Image[]) {
         fs.writeFileSync(DBPath, JSON.stringify(allImages));
+    }
+
+    /**
+     * Retrieve image array based on a specified substring
+     * @param search the substring to search for
+     * @returns Array of Images which relate to the substring
+     */
+    static getImagesByQuery(search: string) {
+        return this.loadAllImages().filter(image => image.tags.indexOf(search.toLowerCase()) >= 0 || image.recognizedText.indexOf(search.toLowerCase()) >= 0);
     }
 }
