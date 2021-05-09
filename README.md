@@ -1,5 +1,9 @@
 # Image Repository (Sever)
 
+## Demo Video (this repository is being used in the backend)
+
+https://user-images.githubusercontent.com/37054853/117561919-0e645880-b058-11eb-8e4c-4cb30f22d138.mp4
+
 ## How to get the app running:
 1. Git clone this repsitory and `cd` into the project folder
 2. Create a `.env` file in the project's root directory and add the following lines:
