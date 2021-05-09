@@ -21,6 +21,11 @@ export async function sendAllImageNames (req: Request, res: Response) {
  * @param res Response
  */
 export async function addNewImage (req: Request, res: Response) {
+    
+    if(process.env.DISABLE_IMAGE_UPLOAD === 'true') {
+        return res.status(400).json({errors: ['Image uploading has been disabled on this instance of this application']});
+    }
+
     if(!req.files?.image) {
         return res.status(400).json({errors: ['"image" file missing from body']});
     } else if(Array.isArray(req.files.image)) {
