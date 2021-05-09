@@ -27,6 +27,7 @@ export default class DatabaseManager {
      * @param recognizedText text contained in the image
      * @param tags tags of the image
      * @param writeToFile wether to write the image to the disk or not
+     * @returns IImage object of the new image
      */
     static async addImage(file: UploadedFile, recognizedText: string[], tags: string[], writeToFile: boolean = true) {
         
@@ -45,8 +46,10 @@ export default class DatabaseManager {
         })
     
         if (writeToFile) {
-            fs.writeFileSync(image.filePath, file.data);
+            fs.writeFile(image.filePath, file.data, () => {});
         }
+
+        return image;
     }
 
     /**
@@ -55,7 +58,7 @@ export default class DatabaseManager {
      * @returns Array of Images which relate to the substring
      */
     static async getImagesByQuery(search: string): Promise<IImage[]> {
-        return (await Image.find({ $text: { $search: search } }));
+        return Image.find({ $text: { $search: search } });
     }
 
     /**

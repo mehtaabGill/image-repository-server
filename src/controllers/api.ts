@@ -36,12 +36,11 @@ export async function addNewImage (req: Request, res: Response) {
     
     const uploadedImage = req.files.image;
 
-    const labels = await Rekognition.getImageLabels(uploadedImage.data);
-    const text = await Rekognition.getImageText(uploadedImage.data);
+    const [labels, text] = await Promise.all([Rekognition.getImageLabels(uploadedImage.data), Rekognition.getImageText(uploadedImage.data)])
 
-    DatabaseClient.addImage(uploadedImage, text, labels);
+    const newImage = await DatabaseClient.addImage(uploadedImage, text, labels);
 
-    res.status(200).json({success: true})
+    res.status(200).json({ success: true, imageName: newImage?.fileName });
 }
 
 /**
@@ -59,16 +58,13 @@ export async function getImagesBySearch(req: Request, res: Response) {
  * @param req Request
  * @param res Response
  */
-export async function healthCheck(req: Request, res: Response) {
+ export async function healthCheck(req: Request, res: Response) {
     const isConnectedToDB = mongoose.connection.readyState === 1;
-    
-    if(!isConnectedToDB) {
-        res.status(500).json({ errors: ['Not connected to database'] });
-    } else {
-        res.json({
-            isConnectedToDB,
-            uptime: process.uptime(),
-            cpuUsage: process.cpuUsage()
-        })
-    }
+    const responseStatus = isConnectedToDB ? 200 : 500;
+
+    res.status(responseStatus).json({
+        isConnectedToDB,
+        uptime: process.uptime(),
+        cpuUsage: process.cpuUsage()
+    })
 }

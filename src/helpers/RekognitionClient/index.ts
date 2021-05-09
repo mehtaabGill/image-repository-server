@@ -1,8 +1,8 @@
-import { InvalidComputerVisionCredentials, RekognitionError } from "./errors";
+import { InvalidRekognitionCredentials, RekognitionError } from "./errors";
 
 import AWS from 'aws-sdk';
 
-class ComputerVision {
+class RekognitionClient {
 
     private rekognition: AWS.Rekognition;
 
@@ -24,21 +24,31 @@ class ComputerVision {
     public async getImageLabels(imageBytes: Buffer): Promise<string[]> {
         const imageSummary = await this.rekognition.detectLabels({Image: {Bytes: imageBytes}, MinConfidence: 70}).promise();
         if(!imageSummary.Labels) throw new RekognitionError('Error during image rekognition');
-        return <string[]>imageSummary.Labels.map(label => label.Name?.toLowerCase()).filter(label => label !== undefined);
+        return this.extractImageLabels(imageSummary.Labels);
+    }
+
+    private extractImageLabels(Labels: AWS.Rekognition.Labels): string[] {
+        return Labels.map(label => label.Name?.toLowerCase()).filter(label => label !== undefined) as string[];
     }
 
     public async getImageText(imageBytes: Buffer): Promise<string[]> {
         return new Promise(((resolve: Function, reject: Function) => {
             this.rekognition.detectText({Image: {Bytes: imageBytes}}, (error, data) => {
                 if(error) reject(new RekognitionError(error.message));
-                else resolve(data.TextDetections?.filter(detection => detection.Confidence && detection.Confidence > 70 && detection.Type === 'WORD').map(detection => detection.DetectedText?.toLowerCase()));
+                else if(!data.TextDetections) resolve([]);
+                else resolve(this.extractImageText(data.TextDetections));
             })
         }).bind(this))
+    }
+
+    private extractImageText(TextDetections: AWS.Rekognition.TextDetectionList): string[] {
+        const confidentWords = TextDetections?.filter(detection => detection.Confidence && detection.Confidence > 70 && detection.Type === 'WORD');
+        return confidentWords.map(detection => detection.DetectedText?.toLowerCase()) as string[];
     }
 }
 
 if(!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY || !process.env.AWS_DEFAULT_REGION) {
-    throw new InvalidComputerVisionCredentials("AWS_ACCESS_KEY_ID or AWS_SECRET_ACCESS_KEY or AWS_DEFAULT_REGION missing from process environment");
+    throw new InvalidRekognitionCredentials("AWS_ACCESS_KEY_ID or AWS_SECRET_ACCESS_KEY or AWS_DEFAULT_REGION missing from process environment");
 }
 
-export default new ComputerVision(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY, process.env.AWS_DEFAULT_REGION);
+export default new RekognitionClient(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY, process.env.AWS_DEFAULT_REGION);
