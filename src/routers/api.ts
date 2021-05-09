@@ -1,10 +1,18 @@
 import { Router } from 'express';
-import { readAllImageNames } from '../controllers/images';
+import fileUpload from 'express-fileupload';
+
+import { sendAllImageNames, addNewImage, getImagesBySearch, healthCheck } from '../controllers/api';
 
 const router = Router();
 
-router.get('/fetch-all-images', (req, res) => {
-    res.json(readAllImageNames());
-})
+router.use(fileUpload())
+
+router.get('/fetch-all-images', sendAllImageNames)
+
+router.post('/add-image', addNewImage)
+
+router.get('/search-images', getImagesBySearch)
+
+router.get('/health-check', healthCheck);
 
 export default router;

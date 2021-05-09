@@ -3,6 +3,6 @@ import { sendImageByName } from '../controllers/images';
 
 const router = Router();
 
-router.get('/:imageName', sendImageByName)
+router.get('/static/:imageName', sendImageByName)
 
 export default router;

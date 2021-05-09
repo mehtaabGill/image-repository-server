@@ -1,19 +1,18 @@
-import { Image } from '../types/images';
-import { loadAllImages } from './database';
+import DatabaseClient from '../helpers/database';
 import { Request, Response } from 'express';
 
 /**
- * Returns string array containing the filer path of all images
- * @returns string array of file paths
+ * sends the respective image for the fileName provided
+ * @param req Request
+ * @param res Response
  */
-export function readAllImageNames(): string[] {
-    return loadAllImages().map((image: Image) => image.fileName);
-}
+export async function sendImageByName (req: Request, res: Response) {
 
-export function sendImageByName (req: Request, res: Response) {
-    const allImages = loadAllImages();
-    
-    const requestedImage = allImages.find((image: Image) => image.fileName === req.params.imageName);
+    if(!req.params.imageName) {
+        return res.status(400).end();
+    }
+
+    const requestedImage = await DatabaseClient.getImageByFileName(req.params.imageName);
     
     if(requestedImage) {
         res.sendFile(requestedImage.filePath);
