@@ -13,5 +13,6 @@ export default function(app: Express) {
         origin: '*'
     }))
     //morgan for logging
-    app.use(morgan(':method :url :status - :response-time ms'))
+    if(process.env.NODE_ENV !== 'TESTING')
+        app.use(morgan(':method :url :status - :response-time ms'))
 }

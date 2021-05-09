@@ -13,7 +13,7 @@ const ImageSchema = new Schema({
 }, { collection: 'images' });
 
 //Used for search indexing in mongoDB
-ImageSchema.index({ recognizedText: 'text', tags: 'text' });
+ImageSchema.index({ recognizedText: 'text', tags: 'text', md5Hash: 'text' });
 
 //create the official Model
 const Image: Model<IImage> = model('Image', ImageSchema);

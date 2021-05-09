@@ -18,7 +18,8 @@ async function connectToDB() {
 
     await connect(process.env.DATABASE_URL, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
     
-    console.info('Connected to database instance');
+    if(process.env.NODE_ENV !== 'TESTING')
+        console.info('Connected to database instance');
 }
 
 /**
