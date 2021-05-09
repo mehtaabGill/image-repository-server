@@ -12,7 +12,6 @@ test('Successfully connects to the database', async (done) => {
     
         done();   
     } catch (err) {
-        console.error(err);
         done(err);
     }
 })
